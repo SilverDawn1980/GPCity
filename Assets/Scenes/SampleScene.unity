@@ -4989,7 +4989,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d75699e537ae1cc3b562e0f6241e16b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _highlighter: {fileID: 7870297828398759073, guid: 65a18170877dfcf4e9141007dfaff229, type: 3}
+  _highlightPrefab: {fileID: 7870297828398759073, guid: 65a18170877dfcf4e9141007dfaff229, type: 3}
 --- !u!1 &967967399
 GameObject:
   m_ObjectHideFlags: 0
