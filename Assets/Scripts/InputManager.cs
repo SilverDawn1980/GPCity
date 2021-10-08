@@ -106,8 +106,7 @@ public class InputManager : MonoBehaviour
 
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
-            HighLighted = 
-                GameObject.Instantiate(placeMe,
+            GameObject.Instantiate(placeMe,
                     hit.transform.position, Quaternion.identity);
         }
     }
@@ -120,6 +119,7 @@ public class InputManager : MonoBehaviour
     public void setResidential()
     {
         _currentMode = new Mode(PlaceModeResidence);
+        GetComponent<GameManager>().addResidence();
     }
     public void setCommercial()
     {
