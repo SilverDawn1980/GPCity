@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DefaultNamespace;
 using UnityEditor;
 using UnityEngine;
 
@@ -125,13 +126,26 @@ public class InputManager : MonoBehaviour
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
             var position = hit.transform.position;
-            if (!GameManager.getInstance().GridSystem.GameObjects.ContainsKey(
-                new Vector2Int((int)position.x, (int)position.z)))
+            Vector2Int gridPosition = new Vector2Int((int)position.x, (int)position.z);
+
+            if (GameManager.getInstance().GridSystem.GameObjects.ContainsKey(gridPosition + Vector2Int.down))
             {
-                // Setzte Straße
+                if (GameManager.getInstance().GridSystem.GameObjects[gridPosition + Vector2Int.down].CompareTag("Road"))
+                {
+                    Debug.Log("Ist Road !");
+                }
             }
+            
+            if (!GameManager.getInstance().GridSystem.GameObjects.ContainsKey(gridPosition))
+            {
+                GameObject newRoad = RoadFactory.getRoad(StreetView.ES);
+                newRoad.transform.position = position;
+                GameManager.getInstance().GridSystem.GameObjects.Add(gridPosition,newRoad);
+            }
+           
+            
         }
-        // Prüfe ob auf den Feldern drumherum Straßen sind, wenn ja erzeuge eine Verdindung
+        
         // Wieder diese Prüfung für alle angrenzenden Felder auf denen Straßen sind (max 1 mal)
 
     }
@@ -153,6 +167,11 @@ public class InputManager : MonoBehaviour
     public void setIndustrial()
     {
         _currentMode = new Mode(PlaceModeIndustrial);
+    }
+
+    public void setRoad()
+    {
+        _currentMode = new Mode(PlaceRoad);
     }
 
     public void setSelectMode()

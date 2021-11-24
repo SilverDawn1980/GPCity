@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
 
     private GameManager()
     {
+
     }
 
     public static GameManager getInstance()
@@ -57,6 +58,11 @@ public class GameManager : MonoBehaviour
     {
         get => _grassPrefab;
     }
+
+    public GameObject RoadStraightPrefab { get; set; }
+    public GameObject RoadCornerPrefab { get; set; }
+    public GameObject RoadJunctionPrefab { get; set; }
+    public GameObject RoadCrossPrefab { get; set; }
 
     #endregion
 
@@ -107,13 +113,26 @@ public class GameManager : MonoBehaviour
 
         _moneyDisplay = GameObject.Find("MoneyDisplay").GetComponent<Text>();
         _grassPrefab = Resources.Load("Prefabs/Grass", typeof(GameObject)) as GameObject;
+        RoadStraightPrefab = Resources.Load("Prefabs/RoadStraight", typeof(GameObject)) as GameObject;
+        RoadJunctionPrefab = Resources.Load("Prefabs/RoadJunction", typeof(GameObject)) as GameObject;
+        RoadCornerPrefab = Resources.Load("Prefabs/RoadCorner", typeof(GameObject)) as GameObject;
+        RoadCrossPrefab = Resources.Load("Prefabs/RoadCross", typeof(GameObject)) as GameObject;
         if (DEBUG)
         {
-            Debug.Log("Object GameManager ID :" + this.GetHashCode());
-            if (_grassPrefab == null)
-            {
-                Debug.Log("Error loading Grass Prefab ...");
-            }
+            CheckForNullPointerLoad(_grassPrefab);
+            CheckForNullPointerLoad(RoadStraightPrefab);
+            CheckForNullPointerLoad(RoadJunctionPrefab);
+            CheckForNullPointerLoad(RoadCornerPrefab);
+            CheckForNullPointerLoad(RoadCrossPrefab);
+        }
+    }
+
+    private void CheckForNullPointerLoad(GameObject target)
+    {
+        Debug.Log("Object GameManager ID :" + this.GetHashCode());
+        if (target == null)
+        {
+            Debug.Log("Error loading :" + target.name);
         }
     }
 
