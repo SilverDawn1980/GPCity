@@ -6,9 +6,17 @@ using UnityEngine;
 public class GridSystem
 {
     private Field[,] _fields;
+    private Dictionary<Vector2Int, GameObject> _gameObjects;
+
+    public Dictionary<Vector2Int, GameObject> GameObjects
+    {
+        get => _gameObjects;
+        set => _gameObjects = value;
+    }
 
     public GridSystem()
     {
+        _gameObjects = new Dictionary<Vector2Int, GameObject>();
         initGrid();
     }
 

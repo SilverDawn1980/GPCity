@@ -1,56 +1,75 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class GameManager : MonoBehaviour
 {
+    private const Boolean DEBUG = true;
+    private static GameManager _instance;
+
+    private GameManager()
+    {
+    }
+
+    public static GameManager getInstance()
+    {
+        if (_instance == null)
+        {
+            _instance = Instantiate(new GameObject("GameManager").AddComponent<GameManager>());
+            DontDestroyOnLoad(_instance);
+        }
+
+        return _instance;
+    }
+
     private int _money;
 
     public int Money
     {
-        get
-        {
-            return _money;
-        }
+        get { return _money; }
         set
         {
             _money = value;
             _moneyDisplay.text = _money.ToString() + "$";
         }
     }
-    
-    
-    
+
+
     private GridSystem _gridSystem = new GridSystem();
-    [SerializeField] private GameObject _fieldParent;
-    [SerializeField] private Text _moneyDisplay;
-    
+
+    public GridSystem GridSystem
+    {
+        get => _gridSystem;
+        set => _gridSystem = value;
+    }
+
+    private Text _moneyDisplay;
+
     #region MapPrefabs
 
     [SerializeField] private GameObject _grassPrefab;
-    
-    
+
+    public GameObject GrassPrefab
+    {
+        get => _grassPrefab;
+    }
+
     #endregion
 
     private float _timePerTick = 1;
     private float _timeUntilTick;
+
     private delegate void TickFunct();
 
     private TickFunct _stuffForTick;
-    
+
     // Start is called before the first frame update
     void Start()
     {
-        for (int x = 0; x < 10; x++)
-        {
-            for (int y = 0; y < 10; y++)
-            {
-                GameObject.Instantiate(_grassPrefab, new Vector3(x, 0, y),Quaternion.identity,_fieldParent.transform);
-            }    
-        }
-
-        this.Money = 500;
     }
 
     // Update is called once per frame
@@ -71,9 +90,32 @@ public class GameManager : MonoBehaviour
     {
         _stuffForTick += new TickFunct(ResidenceTick);
     }
-    
+
     private void ResidenceTick()
     {
         Money += 5;
     }
+
+    #region Init
+
+    public void Awake()
+    {
+        if (_instance != null && _instance != this)
+        {
+            Destroy(gameObject);
+        }
+
+        _moneyDisplay = GameObject.Find("MoneyDisplay").GetComponent<Text>();
+        _grassPrefab = Resources.Load("Prefabs/Grass", typeof(GameObject)) as GameObject;
+        if (DEBUG)
+        {
+            Debug.Log("Object GameManager ID :" + this.GetHashCode());
+            if (_grassPrefab == null)
+            {
+                Debug.Log("Error loading Grass Prefab ...");
+            }
+        }
+    }
+
+    #endregion
 }

@@ -106,9 +106,34 @@ public class InputManager : MonoBehaviour
 
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
-            GameObject.Instantiate(placeMe,
-                    hit.transform.position, Quaternion.identity);
+            var position = hit.transform.position;
+            if (GameManager.getInstance().GridSystem.GameObjects
+                .ContainsKey(new Vector2Int(((int)position.x), ((int)position.z))))
+            {
+                return;
+            }
+            GameObject newBuilding = GameObject.Instantiate(placeMe,
+                    position, Quaternion.identity);
+            GameManager.getInstance().GridSystem.GameObjects
+                .Add(new Vector2Int(((int)position.x),((int)position.z)),newBuilding);
         }
+    }
+
+    private void PlaceRoad()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out RaycastHit hit))
+        {
+            var position = hit.transform.position;
+            if (!GameManager.getInstance().GridSystem.GameObjects.ContainsKey(
+                new Vector2Int((int)position.x, (int)position.z)))
+            {
+                // Setzte Straße
+            }
+        }
+        // Prüfe ob auf den Feldern drumherum Straßen sind, wenn ja erzeuge eine Verdindung
+        // Wieder diese Prüfung für alle angrenzenden Felder auf denen Straßen sind (max 1 mal)
+
     }
 
 
@@ -119,7 +144,7 @@ public class InputManager : MonoBehaviour
     public void setResidential()
     {
         _currentMode = new Mode(PlaceModeResidence);
-        GetComponent<GameManager>().addResidence();
+        GameManager.getInstance().addResidence();
     }
     public void setCommercial()
     {

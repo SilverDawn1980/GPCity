@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class Field
 {
-    private GameObject _buildGameObject;
     private TerrainType _terrain;
 
     public TerrainType Terrain
@@ -19,25 +18,5 @@ public class Field
             _terrain = value;
         }
     }
-    
-    public GameObject BuildGameObject
-    {
-        get
-        {
-            return _buildGameObject;
-        }
-    }
 
-    public bool IsBuild { get; }
-
-    public bool buildHere(GameObject building)
-    {
-        if (!IsBuild)
-        {
-            _buildGameObject = building;
-            return true;
-        }
-
-        return false;
-    }
 }
